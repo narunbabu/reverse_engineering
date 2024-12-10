@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 from typing import Optional
-from utils.config import ANTHROPIC_API  # Ensure this path is correct
+from utils.config import ANTHROPIC_API, OPENAI_API  # Ensure this path is correct
 
 @dataclass
 class LLMConfig:
@@ -20,6 +20,7 @@ class LLMConfig:
     api_key: Optional[str] = None
     api_type: Optional[str] = None
     stream: Optional[bool] = False
+    proxy: Optional[str] = None
 
     @classmethod
     def get(cls, llm_type: str) -> 'LLMConfig':
@@ -46,13 +47,23 @@ class LLMConfig:
                 api_type="anthropic",
                 stream=False  # Adjust based on your needs
             )
+        elif llm_type == 'openai':
+            return cls(
+                api_type="openai",
+                api_key=OPENAI_API,
+                api_base_url="https://api.openai.com/v1",
+                model="gpt-4o-mini",
+                temperature=0.7,
+                max_tokens=1024,
+                stream=True  # Enable streaming for Ollama if supported
+            )
         elif llm_type == 'ollama':
             return cls(
                 api_type='ollama',
                 api_base_url='http://localhost:11434/api',
                 # model="qwen2.5-coder:14b",
                 model="qwen2.5-coder:14b",
-                temperature=0.4,
+                temperature=0.7,
                 max_tokens=1024,
                 stream=True  # Enable streaming for Ollama if supported
             )
@@ -83,6 +94,6 @@ class LLMConfig:
         """
         Post-initialization processing to validate fields.
         """
-        if self.api_type not in ['anthropic', 'ollama']:
+        if self.api_type not in ['anthropic', 'ollama','openai']:
             raise ValueError('api_type must be either "anthropic" or "ollama".')
  

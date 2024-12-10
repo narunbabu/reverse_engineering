@@ -12,10 +12,13 @@ from configs.llm_config import LLMConfig
 # Import your Ollama and Anthropic clients here
 from llm_clients.ollama_client import OllamaLLM
 from llm_clients.anthropic_client import AnthropicLLM
+from llm_clients.openai_client import OpenAILLM
+
 
 class LLMType(Enum):
     ANTHROPIC = 'anthropic'
     OLLAMA = 'ollama'
+    OPENAI = 'openai'
 
 class LLMClient:
     def __init__(self, config: LLMConfig):
@@ -26,6 +29,8 @@ class LLMClient:
         # Determine LLM type based on the config
         if self.config.api_type == 'anthropic':
             self.llm_type = LLMType.ANTHROPIC
+        elif self.config.api_type == 'openai':
+            self.llm_type = LLMType.OPENAI
         elif self.config.api_type == 'ollama':
             self.llm_type = LLMType.OLLAMA
         else:
@@ -37,6 +42,8 @@ class LLMClient:
     async def __aenter__(self):
         if self.llm_type == LLMType.ANTHROPIC:
             self.llm = AnthropicLLM(self.config)
+        elif self.llm_type == LLMType.OPENAI:
+            self.llm = OpenAILLM(self.config)
         elif self.llm_type == LLMType.OLLAMA:
             self.llm = OllamaLLM(self.config)
         else:

@@ -83,7 +83,7 @@ class AnthropicLLM:
                 # Handle non-streaming response
                 response_text = ''.join([block.text for block in response.content if block.type == 'text'])
 
-            logger.debug(f"Received response from Anthropic: {response_text}")
+            # logger.debug(f"Received response from Anthropic: {response_text}")
 
             # Extract usage statistics directly from the response
             usage = {

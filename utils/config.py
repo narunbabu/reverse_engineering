@@ -11,5 +11,6 @@ load_dotenv(dotenv_path=dotenv_path)
 # Retrieve the project path
 PROJECT_PATH = Path(os.getenv('PROJECT_PATH', './default_project')).resolve()
 ANTHROPIC_API = os.getenv('ANTHROPIC_API')
+OPENAI_API = os.getenv('OPENAI_API')
 
 print(f"[DEBUG] Loaded PROJECT_PATH: {PROJECT_PATH}")
